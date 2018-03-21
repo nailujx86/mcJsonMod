@@ -20,18 +20,12 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.minecraft.block.Block;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.SyntaxErrorException;
 import net.minecraft.command.WrongUsageException;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.registries.GameData;
-import net.nailuj.mc.json.actions.BlockAction;
 import static org.apache.http.HttpHeaders.ACCEPT;
 import static org.apache.http.HttpHeaders.ACCEPT_ENCODING;
 import static org.apache.http.HttpHeaders.USER_AGENT;
@@ -104,19 +98,19 @@ public class JsonCommand extends CommandBase {
         }
     }
 
-    public void processJson(MinecraftServer server, ICommandSender sender, JsonObject json) {
+    private void processJson(MinecraftServer server, ICommandSender sender, JsonObject json) throws CommandException {
         JsonArray actions = json.getAsJsonArray("actions");
-        for(int i = 0; i < actions.size(); i++) {
+        for (int i = 0; i < actions.size(); i++) {
             JsonObject action = actions.get(i).getAsJsonObject();
-            switch(action.get("type").getAsString()) {
-                case "block":      
-                    BlockAction blockaction = new Gson().fromJson(action, BlockAction.class);
-                    blockaction.processAction(server, sender);
-                    break;
-                case "command":
-                    break;
+            String command = action.get("command").getAsString();
+            String args = action.get("args").getAsString();
+            if(command == null || command == "") {
+                throw new CommandException("Command cannot be null!", new Object[0]);
+            }
+            int executeCommand = server.getCommandManager().executeCommand(sender, command + " " + args);
+            if (executeCommand == 0) {
+                throw new CommandException("", new Object[0]);
             }
         }
     }
-
 }
