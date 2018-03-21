@@ -1,0 +1,16 @@
+[
+{
+  "modid": "jsonmod",
+  "name": "JsonMod",
+  "description": "A mod to load \"scripts\" in a json format.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "github.com/nailujx86/mcJsonMod",
+  "updateUrl": "",
+  "authorList": ["ExampleDude"],
+  "credits": "nailujx86",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
