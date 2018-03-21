@@ -8,8 +8,8 @@ os:
   
 if: tag IS blank
 
-install: "./gradlew setupCIWorkspace"
-script: "./gradlew build"
+install: "gradle setupCIWorkspace"
+script: "gradle build"
 
 before_deploy:
   - export GIT_TAG=$TRAVIS_BRANCH-0.1-build$TRAVIS_BUILD_NUMBER
